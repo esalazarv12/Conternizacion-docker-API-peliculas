@@ -1,70 +1,121 @@
-# Getting Started with Create React App
+# Instalación manual (sin Docker)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+para el backend abrir la terminal y poner:
 
-## Available Scripts
+`cd backend`
+`npm install`
+`npm run dev`
 
-In the project directory, you can run:
+para el frontend abrir la terminal y poner:
 
-### `npm start`
+`cd frontend`
+`npm install`
+`npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Uso de la aplicación
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Entrar a la interfaz web en http://localhost:3000
 
-### `npm test`
+Navegar por los módulos del menú (Navbar):
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Géneros
+Directores
+Productoras
+Tipos
+Películas
 
-### `npm run build`
+Agregar, editar o eliminar registros (CRUD).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Crear películas asociando los datos requeridos.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Pruebas
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+La aplicación fue probada navegando en los diferentes módulos verificando:
 
-### `npm run eject`
+Comunicaciones correctas entre frontend y backend
+Consultas, creaciones, ediciones y eliminaciones funcionando
+Películas reproducibles mediante la url registrada
+Integración con Docker sin errores
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Contenerización con Docker – Aplicación de Gestión de Películas
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Aplicación desarrollada con Node.js + Express (Backend) y React (Frontend), contenerizada completamente con Docker, utilizando Dockerfiles por servicio, archivos .dockerignore, y un docker-compose.yml para orquestar todo el sistema.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Estructura basica del repositorio con docker
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+/backend
+   ├── Dockerfile
+   ├── .dockerignore
+   ├── src/
+   ├── package.json
 
-## Learn More
+/frontend
+   ├── Dockerfile
+   ├── .dockerignore
+   ├── src/
+   ├── package.json
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+docker-compose.yml
+README.md
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Objetivo de la contenerización
 
-### Code Splitting
+La contenerización permite empaquetar el backend y el frontend en contenedores independientes, garantizando que:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+La aplicación siempre corra igual, sin importar el sistema operativo.
+El entorno de ejecución sea reproducible.
+El despliegue sea más rápido y sin conflictos de dependencias.
+El proyecto esté listo para usarse en Docker Desktop, servidores, Docker Hub, etc.
 
-### Analyzing the Bundle Size
+# Dockerfiles utilizados
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+A continuación se resumen los archivos creados para contenerizar cada módulo.
 
-### Making a Progressive Web App
+Backend – Dockerfile:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 4000
+CMD ["npm", "run", "dev"]
 
-### Advanced Configuration
+| Instrucción                 | Explicación                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| `FROM node:18-alpine`       | Imagen ligera optimizada para producción.                    |
+| `WORKDIR /app`              | Carpeta donde se ejecutará el backend dentro del contenedor. |
+| `COPY package*.json`        | Permite instalar dependencias sin copiar todo el proyecto.   |
+| `RUN npm install`           | Instala las dependencias.                                    |
+| `COPY . .`                  | Copia el código fuente.                                      |
+| `EXPOSE 4000`               | Indica que el backend escucha en el puerto 4000.             |
+| `CMD ["npm", "run", "dev"]` | Arranca el backend.                                          |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Backend – .dockerignore
 
-### Deployment
+node_modules
+npm-debug.log
+.DS_Store
+.vscode
+coverage
+dist
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+¿Por qué ignoramos estos archivos?
 
-### `npm run build` fails to minify
+node_modules: se reconstruyen dentro del contenedor → ahorra espacio.
+archivos temporales (.log, .DS_Store): no necesarios.
+coverage, dist: son generados en desarrollo, no deben subirse a la imagen.
+.vscode: configuración local del editor, no pertenece al contenedor.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Frontend – Dockerfile
+
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
+
+La lógica es igual al backend, pero expone el puerto 3000 y usa "npm start".
+
