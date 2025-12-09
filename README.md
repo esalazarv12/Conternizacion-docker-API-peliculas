@@ -242,3 +242,86 @@ EXPOSE 3000
 CMD ["npm", "start"]
 
 La lógica es igual al backend, pero expone el puerto 3000 y usa "npm start".
+
+
+# Orquestación con Docker Compose
+Archivo: docker-compose.yml
+version: "3.9"
+services:
+backend:
+build: ./backend
+container_name: peliculas-backend
+restart: always
+ports:- "4000:4000"
+env_file:- ./backend/.env
+networks:- peliculas-net
+frontend:
+build: ./frontend
+container_name: peliculas-frontend
+restart: always
+ports:
+- "3000:3000"
+environment:- REACT_APP_API_URL=http://localhost:4000
+depends_on:- backend
+networks:- peliculas-net
+networks:
+peliculas-net:
+driver: bridge
+¿Por qué esta estructura?
+build: indica el directorio donde está el Dockerfile.
+container_name: nombre amigable para Docker Desktop.
+ports: permite acceder desde el navegador.
+depends_on: el frontend espera que el backend esté disponible.
+env_file: carga variables del backend.
+network: ambos contenedores comparten la misma red.
+# Pasos para construir el sistema
+Construir las imágenes. En la terminal del proyecto porner el siguiente codigo:
+`docker compose build`
+¿Qué hizo este comando en este proyecto?
+Leyó los Dockerfiles del backend y frontend.
+Construyó dos imágenes independientes.
+Instaló dependencias dentro de cada contenedor.
+Preparó la aplicación para ejecutarse en Docker Desktop.
+Levantar el sistema En la terminal del proyecto porner el siguiente codigo:
+`docker compose up-d`
+¿Qué hace este comando?
+Inicia los contenedores en modo desatendido.
+Conecta backend y frontend en una red interna.
+Deja la plataforma funcionando:
+Frontend: http://localhost:3000
+Backend: http://localhost:4000
+# Visualizar en Docker Desktop
+Gracias a la contenerización realizada (Dockerfiles, .dockerignore y Docker Compose), ahora se
+pueden administrar los servicios desde Docker Desktop:
+Contenedores
+Son las instancias en ejecución de tu aplicación.
+Permiten iniciar, detener y reiniciar backend y frontend.
+Imágenes
+Son las plantillas que Docker usa para crear contenedores.
+Representan la “foto” final del backend y frontend empacados.
+Volúmenes
+Almacenan datos persistentes (si se llegaran a usar).
+Sobreviven aunque se eliminen los contenedores.
+# Prueba en el navegador
+Una vez levantado con Docker:
+Abrir el navegador.
+Ir a http://localhost:3000
+Comprobar:
+Listado de películas
+Formularios de géneros, directores, productoras y tipos
+Conexión correcta con el backend
+# Diagrama general de la arquitectura
++----------------+
++------------------+
+| Frontend | | Backend |
+| React (3000) | <----> | Node.js (4000) |
++----------------+
++------------------+
+^
+|
+Docker Container
+^
+|
+Docker Container
+\________________________/
+Docker Compose
