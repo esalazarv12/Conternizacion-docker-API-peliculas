@@ -1,70 +1,327 @@
-# Getting Started with Create React App
+# Aplicación Web de Gestión de Películas (Proyecto IUDigital)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Descripción del Proyecto
 
-## Available Scripts
+La Institución Universitaria Digital de Antioquia requiere una aplicación web tipo plataforma de películas donde los administradores puedan gestionar películas, series y toda su información asociada.
+El objetivo es proporcionar un sistema similar a Cuevana (pero legal), donde la Universidad agregará contenido con licencias válidas.
 
-In the project directory, you can run:
+La aplicación se desarrolló con una arquitectura monolítica, compuesta por:
 
-### `npm start`
+Backend: Node.js + Express + MongoDB
+Frontend: React
+Contenedorización: Docker y Docker Compose
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+No se incluye autenticación, registro de usuarios ni seguridad de acceso
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Módulos desarrollados
 
-### `npm test`
+Género
+Permite registrar, listar, editar y activar/inactivar los géneros.
+Campos: nombre, estado, fechas, descripción.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Director
+Permite gestionar directores.
+Campos: nombres, estado y fechas.
 
-### `npm run build`
+Productora
+Permite registrar productoras como Disney, Warner, etc.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Tipo
+Gestiona si el contenido es película o serie.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Media (Películas/Series)
+Administra todas las producciones.
+Incluye información general y selección de género, director, productora y tipo activos.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Cada módulo cuenta con su model, controller y route en el backend, y con formulario y listados en el frontend.
 
-### `npm run eject`
+# Tecnologías utilizadas
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Backend
+Node.js
+Express
+MongoDB + Mongoose
+Dotenv
+Frontend
+React
+Fetch API / Services
+CSS
+Contenedorización
+Docker
+Dockerfiles para frontend y backend
+Docker Compose
+Docker Desktop
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Estructura del src del backend:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+backend/
+ └── src/
+      ├── controllers/
+      │     ├── directorController.js
+      │     ├── generoController.js
+      │     ├── peliculaController.js
+      │     ├── productoraController.js
+      │     └── tipoController.js
+      ├── models/
+      │     ├── DirectorModel.js
+      │     ├── GeneroModel.js
+      │     ├── PeliculaModel.js
+      │     ├── ProductoraModel.js
+      │     └── TipoModel.js
+      ├── routes/
+      │     ├── directorRoutes.js
+      │     ├── generoRoutes.js
+      │     ├── peliculaRoutes.js
+      │     ├── productoraRoutes.js
+      │     └── tipoRoutes.js
+      ├── app.js
+      └── server.js
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Estructura del src del frontend:
 
-## Learn More
+frontend/
+ └── src/
+      ├── components/
+      │     ├── directorForm.js
+      │     ├── directorList.js
+      │     ├── generoForm.js
+      │     ├── generoList.js
+      │     ├── peliculaForm.js
+      │     ├── peliculaEditForm.js
+      │     ├── peliculaList.js
+      │     ├── productoraForm.js
+      │     ├── productoraList.js
+      │     ├── tipoForm.js
+      │     └── tipoList.js
+      ├── pages/
+      │     ├── directorPage.js
+      │     ├── peliculaPage.js
+      │     ├── generoPage.js
+      │     ├── tipoPage.js
+      │     └── productoraPage.js
+      ├── services/
+      │     └── api.js
+      ├── App.js
+      └── App.css
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# Contenerización con Docker
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+El proyecto incluye:
 
-### Code Splitting
+Dockerfile del backend
+Dockerfile del frontend
+.dockerignore para ambos componentes
+docker-compose.yml para levantar el sistema completo
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# Levantamiento del sistema
 
-### Analyzing the Bundle Size
+`docker compose build`
+`docker compose up -d`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+El backend quedará expuesto en: http://localhost:4000
 
-### Making a Progressive Web App
+El frontend quedará disponible en: http://localhost:3000
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# Instalación manual (sin Docker)
 
-### Advanced Configuration
+para el backend abrir la terminal y poner:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+`cd backend`
+`npm install`
+`npm run dev`
 
-### Deployment
+para el frontend abrir la terminal y poner:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+`cd frontend`
+`npm install`
+`npm start`
 
-### `npm run build` fails to minify
+# Uso de la aplicación
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Entrar a la interfaz web en http://localhost:3000
+
+Navegar por los módulos del menú (Navbar):
+
+Géneros
+Directores
+Productoras
+Tipos
+Películas
+
+Agregar, editar o eliminar registros (CRUD).
+
+Crear películas asociando los datos requeridos.
+
+# Pruebas
+
+La aplicación fue probada navegando en los diferentes módulos verificando:
+
+Comunicaciones correctas entre frontend y backend
+Consultas, creaciones, ediciones y eliminaciones funcionando
+Películas reproducibles mediante la url registrada
+Integración con Docker sin errores
+
+# Contenerización con Docker – Aplicación de Gestión de Películas
+
+Aplicación desarrollada con Node.js + Express (Backend) y React (Frontend), contenerizada completamente con Docker, utilizando Dockerfiles por servicio, archivos .dockerignore, y un docker-compose.yml para orquestar todo el sistema.
+
+# Estructura basica del repositorio con docker
+
+/backend
+   ├── Dockerfile
+   ├── .dockerignore
+   ├── src/
+   ├── package.json
+
+/frontend
+   ├── Dockerfile
+   ├── .dockerignore
+   ├── src/
+   ├── package.json
+
+docker-compose.yml
+README.md
+
+# Objetivo de la contenerización
+
+La contenerización permite empaquetar el backend y el frontend en contenedores independientes, garantizando que:
+
+La aplicación siempre corra igual, sin importar el sistema operativo.
+El entorno de ejecución sea reproducible.
+El despliegue sea más rápido y sin conflictos de dependencias.
+El proyecto esté listo para usarse en Docker Desktop, servidores, Docker Hub, etc.
+
+# Dockerfiles utilizados
+
+A continuación se resumen los archivos creados para contenerizar cada módulo.
+
+Backend – Dockerfile:
+
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 4000
+CMD ["npm", "run", "dev"]
+
+| Instrucción                 | Explicación                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| `FROM node:18-alpine`       | Imagen ligera optimizada para producción.                    |
+| `WORKDIR /app`              | Carpeta donde se ejecutará el backend dentro del contenedor. |
+| `COPY package*.json`        | Permite instalar dependencias sin copiar todo el proyecto.   |
+| `RUN npm install`           | Instala las dependencias.                                    |
+| `COPY . .`                  | Copia el código fuente.                                      |
+| `EXPOSE 4000`               | Indica que el backend escucha en el puerto 4000.             |
+| `CMD ["npm", "run", "dev"]` | Arranca el backend.                                          |
+
+Backend – .dockerignore
+
+node_modules
+npm-debug.log
+.DS_Store
+.vscode
+coverage
+dist
+
+¿Por qué ignoramos estos archivos?
+
+node_modules: se reconstruyen dentro del contenedor → ahorra espacio.
+archivos temporales (.log, .DS_Store): no necesarios.
+coverage, dist: son generados en desarrollo, no deben subirse a la imagen.
+.vscode: configuración local del editor, no pertenece al contenedor.
+
+Frontend – Dockerfile
+
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
+
+La lógica es igual al backend, pero expone el puerto 3000 y usa "npm start".
+
+
+# Orquestación con Docker Compose
+Archivo: docker-compose.yml
+version: "3.9"
+services:
+backend:
+build: ./backend
+container_name: peliculas-backend
+restart: always
+ports:- "4000:4000"
+env_file:- ./backend/.env
+networks:- peliculas-net
+frontend:
+build: ./frontend
+container_name: peliculas-frontend
+restart: always
+ports:
+- "3000:3000"
+environment:- REACT_APP_API_URL=http://localhost:4000
+depends_on:- backend
+networks:- peliculas-net
+networks:
+peliculas-net:
+driver: bridge
+¿Por qué esta estructura?
+build: indica el directorio donde está el Dockerfile.
+container_name: nombre amigable para Docker Desktop.
+ports: permite acceder desde el navegador.
+depends_on: el frontend espera que el backend esté disponible.
+env_file: carga variables del backend.
+network: ambos contenedores comparten la misma red.
+# Pasos para construir el sistema
+Construir las imágenes. En la terminal del proyecto porner el siguiente codigo:
+`docker compose build`
+¿Qué hizo este comando en este proyecto?
+Leyó los Dockerfiles del backend y frontend.
+Construyó dos imágenes independientes.
+Instaló dependencias dentro de cada contenedor.
+Preparó la aplicación para ejecutarse en Docker Desktop.
+Levantar el sistema En la terminal del proyecto porner el siguiente codigo:
+`docker compose up-d`
+¿Qué hace este comando?
+Inicia los contenedores en modo desatendido.
+Conecta backend y frontend en una red interna.
+Deja la plataforma funcionando:
+Frontend: http://localhost:3000
+Backend: http://localhost:4000
+# Visualizar en Docker Desktop
+Gracias a la contenerización realizada (Dockerfiles, .dockerignore y Docker Compose), ahora se
+pueden administrar los servicios desde Docker Desktop:
+Contenedores
+Son las instancias en ejecución de tu aplicación.
+Permiten iniciar, detener y reiniciar backend y frontend.
+Imágenes
+Son las plantillas que Docker usa para crear contenedores.
+Representan la “foto” final del backend y frontend empacados.
+Volúmenes
+Almacenan datos persistentes (si se llegaran a usar).
+Sobreviven aunque se eliminen los contenedores.
+# Prueba en el navegador
+Una vez levantado con Docker:
+Abrir el navegador.
+Ir a http://localhost:3000
+Comprobar:
+Listado de películas
+Formularios de géneros, directores, productoras y tipos
+Conexión correcta con el backend
+# Diagrama general de la arquitectura
++----------------+
++------------------+
+| Frontend | | Backend |
+| React (3000) | <----> | Node.js (4000) |
++----------------+
++------------------+
+^
+|
+Docker Container
+^
+|
+Docker Container
+\________________________/
+Docker Compose
